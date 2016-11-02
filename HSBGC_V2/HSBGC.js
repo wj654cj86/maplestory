@@ -76,7 +76,7 @@ function start() {
 	s += '</table></td></tr></table>';
 	s += '<form>';
 	s += '破防狀態說明<br>正常：本身就能破防<br>剛好：必須點極限屬性才能破防，增益不計算無視防禦<br>無法：就算點極限屬性也無法破防';
-	s += '<br>將此計算機分享出去吧<br>http://tinyurl.com/tutugoogle/</form>';
+	s += '<br>將此計算機分享出去吧<br>https://wj654cj86.github.io/maplestory/HSBGC_V2/</form>';
 	pagbody.innerHTML += s;
 	document.getElementsByName('radiobutton')[0].checked = true;
 	jobset(0);
