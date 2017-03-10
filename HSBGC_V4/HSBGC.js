@@ -62,14 +62,14 @@ function start() {
 
 	//能力表輸入輸出
 	s = '<table><tr><td style="vertical-align:text-top;">';
-	s += '輸入基本能力值' + '<br>';
+	s += '輸入基本能力值：' + '<br>';
 	s += '<table style="text-align:right;">';
 	for (var i = 0; i < 3; i++)
 		s += build_io(1, ioid[2] + abilityid[0] + i, '');
 	for (var i = 0; i < 5; i++)
 		s += build_io(1, ioid[2] + dataid[i], datastring[i]);
 	s += '</table>';
-	s += '輸入其他數值' + '<br>';
+	s += '輸入其他數值：' + '<br>';
 	s += '<table style="text-align:right;">';
 	for (var i = 0; i < 2; i++)
 		s += build_io(1, ioid[0] + otherid[i], otherstring[i]);
@@ -77,7 +77,7 @@ function start() {
 	s += '</td>';
 
 	s += '<td style="vertical-align:text-top;">';
-	s += '輸入原先等級' + '<br>';
+	s += '輸入原先等級：' + '<br>';
 	s += '<table style="text-align:right;">';
 	for (var i = 0; i < 3; i++)
 		s += build_io(1, ioid[3] + abilityid[0] + i, '');
@@ -88,14 +88,14 @@ function start() {
 	s += '</td>';
 
 	s += '<td style="vertical-align:text-top;">';
-	s += '建議提升等級' + '<br>';
+	s += '建議提升等級：' + '<br>';
 	s += '<table style="text-align:right;">';
 	for (var i = 0; i < 3; i++)
 		s += build_io(0, ioid[4] + abilityid[0] + i, '');
 	for (var i = 0; i < 5; i++)
 		s += build_io(0, ioid[4] + dataid[i], datastring[i]);
 	s += '</table>';
-	s += '結果說明' + '<br>';
+	s += '結果說明：' + '<br>';
 	s += '<table style="text-align:right;">';
 	for (var i = 0; i < 3; i++)
 		s += build_io(0, ioid[1] + explainid[i], explainstring[i]);
