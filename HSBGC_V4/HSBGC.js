@@ -1,15 +1,16 @@
-﻿var dataid = ["critical", "criticaldamage", "ignore", "total", "boss"];
+﻿var abilityid = ["ability"];
+var abilitystring = [["主要屬性", "副要屬性", ""], //
+["血量點數", "血量加成", "力量屬性"], //
+["幸運屬性", "力量屬性", "敏捷屬性"], //
+["力量屬性", "敏捷屬性", "幸運屬性"]];
+
+var dataid = ["critical", "criticaldamage", "ignore", "total", "boss"];
 var datastring = ["爆擊機率", "爆傷加成", "無視防禦", "總傷加成", "王傷加成"];
 var otherid = ["defence", "point"];
 var otherstring = ["怪物防禦", "點數預算"];
 var explainid = ["condition", "point", "gain"];
 var explainstring = ["破防狀態", "剩餘點數", "增加效益"];
 var jobstring = ["一般職業", "惡魔復仇者", "影武者", "傑諾"];
-var abilityid = ["ability"];
-var abilitystring = [["主要屬性", "副要屬性", ""], //
-["血量點數", "血量加成", "力量屬性"], //
-["幸運屬性", "力量屬性", "敏捷屬性"], //
-["力量屬性", "敏捷屬性", "幸運屬性"]];
 
 var ioid = ["other", "explain", "base", "inlevel", "outlevel"];
 
@@ -49,7 +50,7 @@ function start() {
 	var build_io = function(io, id, ds) {
 		var s = '';
 		s += '<tr><td id="lable' + id + '">' + ds + '：</td>';
-		s += '<td><input type="text" id="' + id + '" ' + (io ? 'maxlength="6"' : 'readonly') + ' style="text-align:right;width:50px;"/></td></tr>';
+		s += '<td><input type="text" id="text' + id + '" ' + (io ? 'maxlength="6"' : 'readonly') + ' style="text-align:right;width:50px;"/></td></tr>';
 		return s;
 	};
 
@@ -226,11 +227,8 @@ function start() {
 function jobset(j) {//切換職業選擇
 	job = j;
 	var setio = function(id, s, b) {
-		setio2('lable' + id, b ? '' : s + '：', id, b);
-	};
-	var setio2 = function(idl, s, idt, b) {
-		document.getElementById(idl).innerHTML = s;
-		document.getElementById(idt).disabled = b;
+		window['lable' + id].innerHTML = b ? '' : s + '：';
+		window['text' + id].disabled = b;
 	};
 
 	var disabled = [//
@@ -243,8 +241,10 @@ function jobset(j) {//切換職業選擇
 		for(var i = 0; i < 3; i++)
 			setio(ioid[2 + io] + abilityid[0] + i, abilitystring[j][i], disabled[j][(io < 1) ? io : 1][i]);
 }
-
 function calculate() {//開始計算
+}
+
+function calculate2() {//開始計算
 	var delstr = function(t) {
 		t.value = t.value.replace(/[^\d]/g, '');
 		return (0 + t.value) * 1;
