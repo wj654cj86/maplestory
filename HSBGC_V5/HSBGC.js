@@ -18,6 +18,9 @@ function _sumpoint() {
 function minnum(x, y) {
 	return x < y ? x : y;
 }
+function maxnum(x, y) {
+	return x > y ? x : y;
+}
 
 function effect(lv, m) {
 	return lv * m + (lv - 5) * (lv > 5);
@@ -36,110 +39,97 @@ var build_data = function(i, j, k) {
 	else
 		return [sumpoint[i] + sumpoint[j] + sumpoint[k], i, j, k];
 };
-
-function start() {
-	document.getElementsByName('radiobutton')[0].checked = true;
-	jobset(0);
-
-	//建立搜尋加速表
-	var build_table = function(fun1, fun2) {
-		var M = [];
-		M[M.length] = build_data(0, 0);
-		for (var i = 1; i <= 10; i++) {
-			var min1 = fun1(i),
-			    max1 = fun1(i + 1);
-			var min2 = 0,
-			    max2 = 10;
-			for (var j = 10; j >= 1; j--)
-				if (fun2(j) > min1) {
-					min2 = j;
-					break;
-				}
-			for (var j = 1; j <= 10; j++)
-				if (fun2(j) < max1) {
-					max2 = j;
-					break;
-				}
-			for (var j = min2; j <= max2; j++)
-				M[M.length] = build_data(i, j);
-		}
-		for (var i = M[M.length - 1][2] + 1; i <= 10; i++)
-			M[M.length] = build_data(10, i);
-		return M;
-	};
-	var best_table = function(best, fun1, fun2) {
-		var M = build_table(fun1, fun2);
-		var L = M.length;
-		var B;
-		for ( B = 0; B < L; B++)
-			if (M[B][1] >= best)
+var build_table = function(fun1, fun2) {
+	var M = [];
+	M[M.length] = build_data(0, 0);
+	for (var i = 1; i <= 10; i++) {
+		var min1 = fun1(i),
+		    max1 = fun1(i + 1);
+		var min2 = 0,
+		    max2 = 10;
+		for (var j = 10; j >= 1; j--)
+			if (fun2(j) > min1) {
+				min2 = j;
 				break;
-		var M2 = [];
-		for (var i = 0; i < best; i++) {
-			M2[M2.length] = build_data(i, i);
-			M2[M2.length] = build_data(i, i + 1);
-		}
-		for (; B < L; B++)
-			M2[M2.length] = M[B];
-		return M2;
-	};
-	var dualblade_table = function(fun1, fun2) {
-		var M = build_table(fun1, fun2);
-		var L = M.length;
-		var F = function(v, i) {
-			return build_data(v[1], v[2], v[2] + i);
-		};
-		var M2 = [];
-		for (var i = 0; i < L; i++)
-			if (i + 1 < L) {
-				M2[M2.length] = F(M[i], 0);
-				if (M[i][1] == M[i + 1][1])
-					M2[M2.length] = F(M[i], 1);
 			}
-		M2[M2.length] = build_data(10, 10, 10);
-		return M2;
-	};
-
-	O_ability[0] = build_table(function(i) {
-		return 4.0 / setpoint(i);
-	}, function(j) {
-		return 1.0 / setpoint(j);
-	});
-	N_ability[0] = O_ability[0].length;
-
-	O_ability[1] = [];
-	for (var i = 0; i < 11; i++)
-		for (var j = 0; j < 11; j++)
-			O_ability[1][O_ability[1].length] = build_data(0, i, j);
-	N_ability[1] = O_ability[1].length;
-
-	O_ability[2] = dualblade_table(function(i) {
-		return 4.0 / setpoint(i);
-	}, function(j) {
-		return 1.0 / setpoint(j);
-	});
-	N_ability[2] = O_ability[2].length;
-
-	O_ability[3] = [];
-	for (var i = 0; i <= 10; i++) {
-		O_ability[3][O_ability[3].length] = build_data(i, i, i);
-		if (i + 1 <= 10) {
-			O_ability[3][O_ability[3].length] = build_data(i, i, i + 1);
-			O_ability[3][O_ability[3].length] = build_data(i, i + 1, i + 1);
-		}
+		for (var j = 1; j <= 10; j++)
+			if (fun2(j) < max1) {
+				max2 = j;
+				break;
+			}
+		for (var j = min2; j <= max2; j++)
+			M[M.length] = build_data(i, j);
 	}
-	N_ability[3] = O_ability[3].length;
+	for (var i = M[M.length - 1][2] + 1; i <= 10; i++)
+		M[M.length] = build_data(10, i);
+	return M;
+};
+var best_table = function(best, fun1, fun2) {
+	var M = build_table(fun1, fun2);
+	var L = M.length;
+	var B;
+	for ( B = 0; B < L; B++)
+		if (M[B][1] >= best)
+			break;
+	var M2 = [];
+	for (var i = 0; i < best; i++) {
+		M2[M2.length] = build_data(i, i);
+		M2[M2.length] = build_data(i, i + 1);
+	}
+	for (; B < L; B++)
+		M2[M2.length] = M[B];
+	return M2;
+};
+var dualblade_table = function(fun1, fun2) {
+	var M = build_table(fun1, fun2);
+	var L = M.length;
+	var F = function(v, i) {
+		return build_data(v[1], v[2], v[2] + i);
+	};
+	var M2 = [];
+	for (var i = 0; i < L; i++)
+		if (i + 1 < L) {
+			M2[M2.length] = F(M[i], 0);
+			if (M[i][1] == M[i + 1][1])
+				M2[M2.length] = F(M[i], 1);
+		}
+	M2[M2.length] = build_data(10, 10, 10);
+	return M2;
+};
 
-	O_damage = best_table(6, function(i) {
-		return (3.0 + (i > 4)) / setpoint(i);
-	}, function(j) {
-		return 3.0 / setpoint(j);
-	});
-	N_damage = O_damage.length;
+O_ability[0] = build_table(function(i) {
+	return 4.0 / setpoint(i);
+}, function(j) {
+	return 1.0 / setpoint(j);
+});
+N_ability[0] = O_ability[0].length;
 
-	//測試函數
-	//test();
-}
+O_ability[1] = [];
+//for (var i = 0; i < 11; i++)
+//	for (var j = 0; j < 11; j++)
+//		O_ability[1][O_ability[1].length] = build_data(0, i, j);
+N_ability[1] = O_ability[1].length;
+
+O_ability[2] = dualblade_table(function(i) {
+	return 4.0 / setpoint(i);
+}, function(j) {
+	return 1.0 / setpoint(j);
+});
+N_ability[2] = O_ability[2].length;
+
+O_ability[3] = dualblade_table(function(i) {
+	return 1.0 / setpoint(i);
+}, function(j) {
+	return 1.0 / setpoint(j);
+});
+N_ability[3] = O_ability[3].length;
+
+O_damage = best_table(6, function(i) {
+	return (3.0 + (i > 4)) / setpoint(i);
+}, function(j) {
+	return 3.0 / setpoint(j);
+});
+N_damage = O_damage.length;
 
 function jobset(j) {//切換職業選擇
 	job = j;
@@ -163,6 +153,14 @@ function jobset(j) {//切換職業選擇
 		for(var i = 0; i < 3; i++)
 			setio(ioid[io] + 'ability' + i, abilitystring[j][i], disabled[j][(io < 1) ? io : 1][i]);
 }
+
+function start() {
+	document.getElementsByName('radiobutton')[0].checked = true;
+	jobset(0);
+	//測試函數
+	//test();
+}
+
 function calculate() {//開始計算
 	var delstr = function(t) {
 		t.value = t.value.replace(/[^\d]/g, '');
@@ -178,14 +176,14 @@ function calculate() {//開始計算
 	var baseboss = delstr(textbaseboss);
 	var otherdefence = delstr(textotherdefence);
 	var otherpoint = delstr(textotherpoint);
-	var inlevelability0 = delstr(textinlevelability0);
-	var inlevelability1 = delstr(textinlevelability1);
-	var inlevelability2 = delstr(textinlevelability2);
-	var inlevelcritical = delstr(textinlevelcritical);
-	var inlevelcriticaldamage = delstr(textinlevelcriticaldamage);
-	var inlevelignore = delstr(textinlevelignore);
-	var inleveltotal = delstr(textinleveltotal);
-	var inlevelboss = delstr(textinlevelboss);
+	var inlevelability0 = minnum(10, delstr(textinlevelability0));
+	var inlevelability1 = minnum(10, delstr(textinlevelability1));
+	var inlevelability2 = minnum(10, delstr(textinlevelability2));
+	var inlevelcritical = minnum(10, delstr(textinlevelcritical));
+	var inlevelcriticaldamage = minnum(10, delstr(textinlevelcriticaldamage));
+	var inlevelignore = minnum(10, delstr(textinlevelignore));
+	var inleveltotal = minnum(10, delstr(textinleveltotal));
+	var inlevelboss = minnum(10, delstr(textinlevelboss));
 //	var outlevelability0 = delstr(textoutlevelability0);
 //	var outlevelability1 = delstr(textoutlevelability1);
 //	var outlevelability2 = delstr(textoutlevelability2);
@@ -204,7 +202,25 @@ function calculate() {//開始計算
 		for (i = 0; i < N; i++)
 			if(O[i][1] == l1 || O[i][2] == l2)
 				break;
+		for(var j = O[i][1]; j < l1; j++)
+			M[M.length] = build_data(l1, j);
 		for(var j = O[i][2]; j < l2; j++)
+			M[M.length] = build_data(j, l2);
+		for(; i < N; i++)
+			M[M.length] = O[i];
+		var L = M.length;
+		var s = sumpoint[l1] + sumpoint[l2];
+		for(var j = 0; j < L; j++)
+			M[j][0] -= s;
+		return M;
+	};
+	var inlevel_table_3 = function(O, N, l1, l2, l3) {
+		var i;
+		var M = [];
+		for (i = 0; i < N; i++)
+			if(O[i][1] == l1 || O[i][2] == l2 || O[i][3] == l3)
+				break;
+		for(var j = O[i][1]; j < l1; j++)
 			M[M.length] = build_data(l1, j);
 		for(var j = O[i][2]; j < l2; j++)
 			M[M.length] = build_data(j, l2);
@@ -233,9 +249,26 @@ function calculate() {//開始計算
 		for (var i = 0; i < L_ability[0]; i++)
 			G_ability[i] = 1 + ((function(v) {
 				return 15 * (4 * v[1] + v[2]);
-			})(M_ability[i]) + V_ability) / P_ability;
+			})(M_ability[i]) - V_ability) / P_ability;
 		break;
 	case 1:
+		M_ability = [];
+		var s = sumpoint[inlevelability1] + sumpoint[inlevelability2];
+		for (var i = inlevelability1; i < 11; i++)
+			for (var j = inlevelability2; j < 11; j++){
+				M_ability[M_ability.length] = build_data(0, i, j);
+				M_ability[M_ability.length - 1][0] -= s;
+			}
+		L_ability = M_ability.length;
+		P_ability = baseability0 / 7;
+		if (P_ability < 20)
+			P_ability = 20;
+		for (var i = inlevelability1; i < 11; i++)
+			for (var j = inlevelability2; j < 11; j++)
+				G_ability[i * 11 + j] = 1 + (P_ability * 2 * (i - inlevelability1) / (100 + baseability1) + 15 * (j - inlevelability2)) / (P_ability + baseability2);
+		break;
+	case 2:
+	default:
 	}
 
 }
