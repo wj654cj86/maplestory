@@ -1,4 +1,5 @@
 ﻿var job;
+
 function setpoint(lv) {
 	if (lv <= 0)
 		return 0;
@@ -14,6 +15,7 @@ function _sumpoint() {
 		sumpoint[sumpoint.length] = setpoint(i) + sumpoint[i - 1];
 	return sumpoint;
 }
+var sumpoint = _sumpoint();
 
 function minnum(x, y) {
 	return x < y ? x : y;
@@ -26,23 +28,22 @@ function effect(lv, m) {
 	return lv * m + (lv - 5) * (lv > 5);
 }
 
-var sumpoint = _sumpoint();
-
 var build_data = function(nowlevel, gain, level) {
 	var sp = 0;
-	for(var i = 0; i < level.length; i++)
+	for (var i = 0; i < level.length; i++)
 		sp += sumpoint[nowlevel[i]] - sumpoint[level[i]];
 	return [].concat(sp, gain, nowlevel);
 };
 var build_table = function(base, level, f) {
 	var M = [];
 	var nowlevel = level.slice(0);
-	var p = 0, ll = level.length;
-	while(p < ll){
+	var p = 0,
+		ll = level.length;
+	while (p < ll) {
 		p = 0;
 		M[M.length] = build_data(nowlevel, f(nowlevel, base, level), level);
-		while(p < ll){
-			if(++nowlevel[p] > 10) {
+		while (p < ll) {
+			if (++nowlevel[p] > 10) {
 				nowlevel[p] = level[p];
 				p++;
 			} else
@@ -53,19 +54,19 @@ var build_table = function(base, level, f) {
 		var d = a[0] - b[0];
 		return d == 0 ? a[1] - b[1] : d;
 	});
-	for(var i = 1; i < M.length; i++)
-		while(i < M.length && M[i - 1][1] >= M[i][1])
+	for (var i = 1; i < M.length; i++)
+		while (i < M.length && M[i - 1][1] >= M[i][1])
 			M.splice(i, 1);
 	return M;
 };
 
-var disabled = [//
-[[0, 0, 1], [0, 0, 1]], //
-[[0, 0, 0], [1, 0, 0]], //
-[[0, 0, 0], [0, 0, 0]], //
-[[0, 0, 0], [0, 0, 0]]];
+var disabled = [ //
+	[[0, 0, 1],[0, 0, 1]], //
+	[[0, 0, 0],[1, 0, 0]], //
+	[[0, 0, 0],[0, 0, 0]], //
+	[[0, 0, 0],[0, 0, 0]]];
 
-function jobset(j) {//切換職業選擇
+function jobset(j) { //切換職業選擇
 	job = j;
 	var setio = function(id, s, b) {
 		window['lable' + id].innerHTML = b ? '' : s + '：';
@@ -73,24 +74,25 @@ function jobset(j) {//切換職業選擇
 	};
 
 	var ioid = ["base", "inlevel", "outlevel"];
-	var abilitystring = [["主要屬性", "副要屬性", ""], //
-	["血量點數", "血量加成", "力量屬性"], //
-	["幸運屬性", "力量屬性", "敏捷屬性"], //
-	["力量屬性", "敏捷屬性", "幸運屬性"]];
+	var abilitystring = [ //
+		["主要屬性", "副要屬性", ""], //
+		["血量點數", "血量加成", "力量屬性"], //
+		["幸運屬性", "力量屬性", "敏捷屬性"], //
+		["力量屬性", "敏捷屬性", "幸運屬性"]];
 
-	for(var io = 0; io < 3; io++)
-		for(var i = 0; i < 3; i++)
-			setio(ioid[io] + 'ability' + i, abilitystring[j][i], disabled[j][(io < 1) ? io : 1][i]);
+	for (var io = 0; io < 3; io++)
+		for (var i = 0; i < 3; i++)
+			setio(ioid[io] + 'ability' + i, abilitystring[j][i], disabled[j][io < 1 ? io : 1][i]);
 }
 
 function start() {
 	document.getElementsByName('radiobutton')[0].checked = true;
 	jobset(0);
 	//測試函數
-	test();
+	//test();
 }
 
-function calculate() {//開始計算
+function calculate() { //開始計算
 	var delstr = function(t) {
 		t.value = t.value.replace(/[^\d]/g, '');
 		return (0 + t.value) * 1;
@@ -113,72 +115,61 @@ function calculate() {//開始計算
 	var inlevelignore = minnum(10, delstr(textinlevelignore));
 	var inleveltotal = minnum(10, delstr(textinleveltotal));
 	var inlevelboss = minnum(10, delstr(textinlevelboss));
-//	var outlevelability0 = delstr(textoutlevelability0);
-//	var outlevelability1 = delstr(textoutlevelability1);
-//	var outlevelability2 = delstr(textoutlevelability2);
-//	var outlevelcritical = delstr(textoutlevelcritical);
-//	var outlevelcriticaldamage = delstr(textoutlevelcriticaldamage);
-//	var outlevelignore = delstr(textoutlevelignore);
-//	var outleveltotal = delstr(textoutleveltotal);
-//	var outlevelboss = delstr(textoutlevelboss);
-//	var explaincondition = delstr(textexplaincondition);
-//	var explainpoint = delstr(textexplainpoint);
-//	var explaingain = delstr(textexplaingain);
 
 	var M_ability = build_table([baseability0, baseability1, baseability2], //
-	[inlevelability0, inlevelability1, inlevelability2], //
-	[function(nowlevel, base, level) {
-		var P = maxnum(20, 4 * base[0] + base[1]);
-		var N = 15 * (4 * (nowlevel[0] - level[0]) + (nowlevel[1] - level[1]));
-		return 1 + N / P;
-	}, function(nowlevel, base, level) {
-		var P = maxnum(8, base[0] / 7);
-		var N = P * 2 * (nowlevel[1] - level[1]) / (100 + base[1]) + 15 * (nowlevel[2] - level[2]);
-		return 1 + N / (P + base[2]);
-	}, function(nowlevel, base, level) {
-		var P = maxnum(24, 4 * base[0] + base[1] + base[2]);
-		var N = 15 * (4 * (nowlevel[0] - level[0]) + (nowlevel[1] - level[1]) + (nowlevel[2] - level[2]));
-		return 1 + N / P;
-	}, function(nowlevel, base, level) {
-		var P = maxnum(12, base[0] + base[1] + base[2]);
-		var N = 15 * ((nowlevel[0] - level[0]) + (nowlevel[1] - level[1]) + (nowlevel[2] - level[2]));
-		return 1 + N / P;
-	}][job]
+		[inlevelability0, inlevelability1, inlevelability2], //
+		[function(nowlevel, base, level) {
+			var P = maxnum(20, 4 * base[0] + base[1]);
+			var N = 15 * (4 * (nowlevel[0] - level[0]) + (nowlevel[1] - level[1]));
+			return 1 + N / P;
+		}, function(nowlevel, base, level) {
+			var P = maxnum(8, base[0] / 7);
+			var N = P * 2 * (nowlevel[1] - level[1]) / (100 + base[1]) + 15 * (nowlevel[2] - level[2]);
+			return 1 + N / (P + base[2]);
+		}, function(nowlevel, base, level) {
+			var P = maxnum(24, 4 * base[0] + base[1] + base[2]);
+			var N = 15 * (4 * (nowlevel[0] - level[0]) + (nowlevel[1] - level[1]) + (nowlevel[2] - level[2]));
+			return 1 + N / P;
+		}, function(nowlevel, base, level) {
+			var P = maxnum(12, base[0] + base[1] + base[2]);
+			var N = 15 * ((nowlevel[0] - level[0]) + (nowlevel[1] - level[1]) + (nowlevel[2] - level[2]));
+			return 1 + N / P;
+		}][job]
 	);
 	var L_ability = M_ability.length;
 
 	var M_critical = build_table([basecritical, basecriticaldamage], //
-	[inlevelcritical, inlevelcriticaldamage], //
-	function(nowlevel, base, level) {
-		var B = 10000 + base[0] * (35 + base[1]);
-		var C = minnum(100, base[0] + (effect(nowlevel[0], 1) - effect(level[0], 1)));
-		var D = 10000 + C * (35 + base[1] + (nowlevel[1] - level[1]));
-		return D / B;
-	});
+		[inlevelcritical, inlevelcriticaldamage], //
+		function(nowlevel, base, level) {
+			var B = 10000 + base[0] * (35 + base[1]);
+			var C = minnum(100, base[0] + (effect(nowlevel[0], 1) - effect(level[0], 1)));
+			var D = 10000 + C * (35 + base[1] + (nowlevel[1] - level[1]));
+			return D / B;
+		});
 	var L_critical = M_critical.length;
 
 	var M_damage = build_table([baseboss, basetotal], //
-	[inlevelboss, inleveltotal], //
-	function(nowlevel, base, level) {
-		var P = 100 + base[0] + base[1];
-		var N = (effect(nowlevel[0], 3) - effect(level[0], 3)) + 3 * (nowlevel[1] - level[1]);
-		return 1 + N / P;
-	});
+		[inlevelboss, inleveltotal], //
+		function(nowlevel, base, level) {
+			var P = 100 + base[0] + base[1];
+			var N = (effect(nowlevel[0], 3) - effect(level[0], 3)) + 3 * (nowlevel[1] - level[1]);
+			return 1 + N / P;
+		});
 	var L_damage = M_damage.length;
 
 	var N_attack = (100 - baseignore) * otherdefence;
 	var P_attack = N_attack / (1 - 0.03 * inlevelignore);
 	var S_attack;
-	for(S_attack = inlevelignore; S_attack < 11; S_attack++) {
+	for (S_attack = inlevelignore; S_attack < 11; S_attack++) {
 		N_attack = P_attack * (1 - 0.03 * S_attack);
-		if(N_attack < 10000)
-			break;		
+		if (N_attack < 10000)
+			break;
 	}
 	var M_attack = [];
-	for(; S_attack < 11; S_attack++)
+	for (; S_attack < 11; S_attack++)
 		M_attack[M_attack.length] = build_data([S_attack], 1 + 0.03 * S_attack * P_attack / (10000 - N_attack), [inlevelignore]);
 	var L_attack = M_attack.length;
-	
+
 	var outlevelability0 = '';
 	var outlevelability1 = '';
 	var outlevelability2 = '';
@@ -195,7 +186,7 @@ function calculate() {//開始計算
 			for (var j = 0; j < L_critical; j++)
 				for (var k = 0; k < L_damage; k++) {
 					var point = M_ability[i][0] + M_critical[j][0] + M_damage[k][0] + M_attack[l][0];
-					if(otherpoint >= point) {
+					if (otherpoint >= point) {
 						var gain = M_ability[i][1] * M_critical[j][1] * M_damage[k][1] * M_attack[l][1];
 						if (explaingain < gain || (explaingain == gain && explainpoint < otherpoint - point)) {
 							outlevelability0 = M_ability[i][2];
@@ -226,7 +217,7 @@ function calculate() {//開始計算
 	textexplaingain.value = L_attack ? (L_attack == 11 - inlevelignore ? explaingain : explaingain2) : '';
 }
 
-function test() {//測試函數，將數值自動填入表單
+function test() { //測試函數，將數值自動填入表單
 	textbaseability0.value = 10000;
 	textbaseability1.value = 5000;
 	textbaseability2.value = 0;
