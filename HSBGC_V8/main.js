@@ -278,13 +278,13 @@ function calculate() { //開始計算
 	let N_attack = (100 - data.base.ignore) * data.other.defence;
 	let P_attack = N_attack / (1 - 0.03 * data.inlevel.ignore);
 	let S_attack;
-	for (S_attack = data.inlevel.ignore; S_attack < 11; S_attack++) {
+	for (S_attack = data.inlevel.ignore; S_attack < 16; S_attack++) {
 		N_attack = P_attack * (1 - 0.03 * S_attack);
 		if (N_attack < 10000)
 			break;
 	}
 	let M_attack = [];
-	for (; S_attack < 11; S_attack++)
+	for (; S_attack < 16; S_attack++)
 		M_attack.push(build_data([S_attack], 1 + 0.03 * S_attack * P_attack / (10000 - N_attack), [data.inlevel.ignore]));
 	let L_attack = M_attack.length;
 	if (L_attack != 0) {
@@ -345,9 +345,9 @@ function calculate() { //開始計算
 		if (disabled[job][1][i])
 			iohtml.outlevel.ability[i].text.value = '';
 	}
-	iohtml.explain.condition.text.value = L_attack ? (L_attack == 11 - data.inlevel.ignore ? '正常' : '剛好') : '無法';
-	iohtml.explain.condition.text.style.backgroundColor = L_attack ? (L_attack == 11 - data.inlevel.ignore ? '#44ff44' : '#ffff44') : '#ff4444';
-	iohtml.explain.gain.text.value = L_attack ? (L_attack == 11 - data.inlevel.ignore ? data.explain.gain : data.explain.gain2) : '';
+	iohtml.explain.condition.text.value = L_attack ? (L_attack == 16 - data.inlevel.ignore ? '正常' : '剛好') : '無法';
+	iohtml.explain.condition.text.style.backgroundColor = L_attack ? (L_attack == 16 - data.inlevel.ignore ? '#44ff44' : '#ffff44') : '#ff4444';
+	iohtml.explain.gain.text.value = L_attack ? (L_attack == 16 - data.inlevel.ignore ? data.explain.gain : data.explain.gain2) : '';
 }
 
 function test() { //測試函數，將數值自動填入表單
