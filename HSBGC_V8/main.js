@@ -404,7 +404,7 @@ window.onload = function () {
 			}
 			let ss = '';
 			for (let i = 0; i < count; i++) {
-				ss += '<tr><td></td><td><input type="text" maxlength="6" style="text-align:right;width:50px;"></td></tr>'
+				ss += '<tr><td style="text-align:right;"></td><td style="width:60px;"><input type="text" maxlength="6" style="text-align:right;width:50px;"></td></tr>'
 			}
 			window['table' + objkey].innerHTML += ss;
 			let tbhtml = window['table' + objkey].getElementsByTagName('tr');
