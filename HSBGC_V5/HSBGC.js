@@ -15,26 +15,23 @@ function _sumpoint() {
 		sumpoint[sumpoint.length] = setpoint(i) + sumpoint[i - 1];
 	return sumpoint;
 }
+
 var sumpoint = _sumpoint();
 
-function minnum(x, y) {
-	return x < y ? x : y;
-}
-function maxnum(x, y) {
-	return x > y ? x : y;
-}
+var min = Math.min;
+var max = Math.max;
 
 function effect(lv, m) {
 	return lv * m + (lv - 5) * (lv > 5);
 }
 
-var build_data = function(nowlevel, gain, level) {
+var build_data = function (nowlevel, gain, level) {
 	var sp = 0;
 	for (var i = 0; i < level.length; i++)
 		sp += sumpoint[nowlevel[i]] - sumpoint[level[i]];
 	return [].concat(sp, gain, nowlevel);
 };
-var build_table = function(base, level, f) {
+var build_table = function (base, level, f) {
 	var M = [];
 	var nowlevel = level.slice(0);
 	var p = 0,
@@ -50,7 +47,7 @@ var build_table = function(base, level, f) {
 				break;
 		}
 	}
-	M = M.sort(function(a, b) {
+	M = M.sort(function (a, b) {
 		var d = a[0] - b[0];
 		return d == 0 ? a[1] - b[1] : d;
 	});
@@ -61,14 +58,27 @@ var build_table = function(base, level, f) {
 };
 
 var disabled = [ //
-	[[0, 0, 1],[0, 0, 1]], //
-	[[0, 0, 0],[1, 0, 0]], //
-	[[0, 0, 0],[0, 0, 0]], //
-	[[0, 0, 0],[0, 0, 0]]];
+	[
+		[0, 0, 1],
+		[0, 0, 1]
+	], //
+	[
+		[0, 0, 0],
+		[1, 0, 0]
+	], //
+	[
+		[0, 0, 0],
+		[0, 0, 0]
+	], //
+	[
+		[0, 0, 0],
+		[0, 0, 0]
+	]
+];
 
 function jobset(j) { //切換職業選擇
 	job = j;
-	var setio = function(id, s, b) {
+	var setio = function (id, s, b) {
 		window['lable' + id].innerHTML = b ? '' : s + '：';
 		window['text' + id].disabled = b;
 	};
@@ -78,7 +88,8 @@ function jobset(j) { //切換職業選擇
 		["主要屬性", "副要屬性", ""], //
 		["血量點數", "血量加成", "力量屬性"], //
 		["幸運屬性", "力量屬性", "敏捷屬性"], //
-		["力量屬性", "敏捷屬性", "幸運屬性"]];
+		["力量屬性", "敏捷屬性", "幸運屬性"]
+	];
 
 	for (var io = 0; io < 3; io++)
 		for (var i = 0; i < 3; i++)
@@ -93,7 +104,7 @@ function start() {
 }
 
 function calculate() { //開始計算
-	var delstr = function(t) {
+	var delstr = function (t) {
 		t.value = t.value.replace(/[^\d]/g, '');
 		return (0 + t.value) * 1;
 	};
@@ -107,42 +118,41 @@ function calculate() { //開始計算
 	var baseboss = delstr(textbaseboss);
 	var otherdefence = delstr(textotherdefence);
 	var otherpoint = delstr(textotherpoint);
-	var inlevelability0 = minnum(10, delstr(textinlevelability0));
-	var inlevelability1 = minnum(10, delstr(textinlevelability1));
-	var inlevelability2 = minnum(10, delstr(textinlevelability2));
-	var inlevelcritical = minnum(10, delstr(textinlevelcritical));
-	var inlevelcriticaldamage = minnum(10, delstr(textinlevelcriticaldamage));
-	var inlevelignore = minnum(10, delstr(textinlevelignore));
-	var inleveltotal = minnum(10, delstr(textinleveltotal));
-	var inlevelboss = minnum(10, delstr(textinlevelboss));
+	var inlevelability0 = min(10, delstr(textinlevelability0));
+	var inlevelability1 = min(10, delstr(textinlevelability1));
+	var inlevelability2 = min(10, delstr(textinlevelability2));
+	var inlevelcritical = min(10, delstr(textinlevelcritical));
+	var inlevelcriticaldamage = min(10, delstr(textinlevelcriticaldamage));
+	var inlevelignore = min(10, delstr(textinlevelignore));
+	var inleveltotal = min(10, delstr(textinleveltotal));
+	var inlevelboss = min(10, delstr(textinlevelboss));
 
 	var M_ability = build_table([baseability0, baseability1, baseability2], //
 		[inlevelability0, inlevelability1, inlevelability2], //
-		[function(nowlevel, base, level) {
-			var P = maxnum(20, 4 * base[0] + base[1]);
+		[function (nowlevel, base, level) {
+			var P = max(20, 4 * base[0] + base[1]);
 			var N = 15 * (4 * (nowlevel[0] - level[0]) + (nowlevel[1] - level[1]));
 			return 1 + N / P;
-		}, function(nowlevel, base, level) {
-			var P = maxnum(8, base[0] / 7);
+		}, function (nowlevel, base, level) {
+			var P = max(8, base[0] / 7);
 			var N = P * 2 * (nowlevel[1] - level[1]) / (100 + base[1]) + 15 * (nowlevel[2] - level[2]);
 			return 1 + N / (P + base[2]);
-		}, function(nowlevel, base, level) {
-			var P = maxnum(24, 4 * base[0] + base[1] + base[2]);
+		}, function (nowlevel, base, level) {
+			var P = max(24, 4 * base[0] + base[1] + base[2]);
 			var N = 15 * (4 * (nowlevel[0] - level[0]) + (nowlevel[1] - level[1]) + (nowlevel[2] - level[2]));
 			return 1 + N / P;
-		}, function(nowlevel, base, level) {
-			var P = maxnum(12, base[0] + base[1] + base[2]);
+		}, function (nowlevel, base, level) {
+			var P = max(12, base[0] + base[1] + base[2]);
 			var N = 15 * ((nowlevel[0] - level[0]) + (nowlevel[1] - level[1]) + (nowlevel[2] - level[2]));
 			return 1 + N / P;
-		}][job]
-	);
+		}][job]);
 	var L_ability = M_ability.length;
 
 	var M_critical = build_table([basecritical, basecriticaldamage], //
 		[inlevelcritical, inlevelcriticaldamage], //
-		function(nowlevel, base, level) {
+		function (nowlevel, base, level) {
 			var B = 10000 + base[0] * (35 + base[1]);
-			var C = minnum(100, base[0] + (effect(nowlevel[0], 1) - effect(level[0], 1)));
+			var C = min(100, base[0] + (effect(nowlevel[0], 1) - effect(level[0], 1)));
 			var D = 10000 + C * (35 + base[1] + (nowlevel[1] - level[1]));
 			return D / B;
 		});
@@ -150,7 +160,7 @@ function calculate() { //開始計算
 
 	var M_damage = build_table([baseboss, basetotal], //
 		[inlevelboss, inleveltotal], //
-		function(nowlevel, base, level) {
+		function (nowlevel, base, level) {
 			var P = 100 + base[0] + base[1];
 			var N = (effect(nowlevel[0], 3) - effect(level[0], 3)) + 3 * (nowlevel[1] - level[1]);
 			return 1 + N / P;

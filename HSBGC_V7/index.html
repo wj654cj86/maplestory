@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title></title>
+	<link href="MapleStory.ico" rel="icon">
+	<script type="text/javascript" src="mylibrary.js"></script>
+	<script type="text/javascript" src="main.js"></script>
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+	<form>
+		<label id="bodytitle"></label>
+		<br><label id="labelloaddata"></label><input type="file" id="filein" accept="application/JSON" onchange="loaddata();">
+		<br><label id="labelsavedata"></label><input type="text" id="fileoutname" value="hsbgc" style="width:100px;">
+		<input type="button" id="fileout" onclick="savedata();">
+	</form>
+	<table>
+		<tbody>
+			<tr>
+				<td style="vertical-align:text-top;">
+					<form>
+						<label id="jobchoose"></label>
+						<br>
+						<input type="radio" name="radiojob" onchange="jobset(0)"> <label id="labelgeneraljob"></label>
+						<br>
+						<input type="radio" name="radiojob" onchange="jobset(1)"> <label id="labeldemonavenger"></label>
+						<br>
+						<input type="radio" name="radiojob" onchange="jobset(2)"> <label id="labelthief"></label>
+						<br>
+						<input type="radio" name="radiojob" onchange="jobset(3)"> <label id="labelxenon"></label>
+					</form>
+				</td>
+				<td style="vertical-align:text-top;">
+					<form>
+						<label id="monsterchoose"></label>
+						<br>
+						<input type="radio" name="radiomonster" onchange="monsterset(0)"><label id="labelhitboss"></label>
+						<br>
+						<input type="radio" name="radiomonster" onchange="monsterset(1)"><label id="labelpractice"></label>
+					</form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<table>
+		<tbody>
+			<tr>
+				<td style="vertical-align:text-top;">
+					<label id="labelbase"></label>
+					<br>
+					<table id="tablebase" style="text-align:right;">
+					</table>
+					<label id="labelother"></label>
+					<br>
+					<table id="tableother" style="text-align:right;">
+					</table>
+				</td>
+				<td style="vertical-align:text-top;">
+					<label id="labelinlevel"></label>
+					<br>
+					<table id="tableinlevel" style="text-align:right;">
+					</table>
+					<input type="button" id="startcalculate" style="width:100%;height:93px;" onclick="calculate()">
+				</td>
+				<td style="vertical-align:text-top;">
+					<label id="labeloutlevel"></label>
+					<br>
+					<table id="tableoutlevel" style="text-align:right;">
+					</table>
+					<label id="labelexplain"></label>
+					<br>
+					<table id="tableexplain" style="text-align:right;">
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<form id="instructions">
+	</form>
+</body>
+
+</html>

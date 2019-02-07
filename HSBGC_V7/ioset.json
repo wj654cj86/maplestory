@@ -1,0 +1,36 @@
+{
+	"base": {
+		"ability": [0, 0, 0, 0, 0],
+		"critical": 0,
+		"criticaldamage": 0,
+		"ignore": 0,
+		"total": 0,
+		"boss": 0,
+		"ordinary": 0
+	},
+	"other": {
+		"defence": 0,
+		"point": 0
+	},
+	"inlevel": {
+		"ability": [0, 0, 0, 0, 0],
+		"critical": 0,
+		"criticaldamage": 0,
+		"ignore": 0,
+		"total": 0,
+		"boss": 0
+	},
+	"outlevel": {
+		"ability": [0, 0, 0, 0, 0],
+		"critical": 0,
+		"criticaldamage": 0,
+		"ignore": 0,
+		"total": 0,
+		"boss": 0
+	},
+	"explain": {
+		"condition": 0,
+		"point": 0,
+		"gain": 0
+	}
+}
