@@ -52,5 +52,7 @@
 	"inleveltext": "若已經有先點極限屬性時可以把原先等級輸入在中間",
 	"demonavengerexplain": "惡魔復仇者說明",
 	"demonavengerexplaintext": "目前血量：當前UI顯示的血量<br>最終血量：聖魂騎士角色卡和秘法符文增加的血量<br>　　　　　因為它們不受血量加成影響",
+	"loadsaveexplain": "載入、儲存數據說明",
+	"loadsaveexplaintext": "可以將本次輸入的數值下載儲存，下一次開啟時可以將之前的檔案載入近來",
 	"shareme": "將此計算機分享出去吧！"
 }

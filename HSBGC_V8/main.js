@@ -537,6 +537,9 @@ window.onload = function () {
 			'<br>' + lang.demonavengerexplain +
 			'<br>' + lang.demonavengerexplaintext +
 			'<br>' +
+			'<br>' + lang.loadsaveexplain +
+			'<br>' + lang.loadsaveexplaintext +
+			'<br>' +
 			'<br>' + lang.shareme +
 			'<br>' + location.href;
 
