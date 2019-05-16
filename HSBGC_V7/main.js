@@ -296,7 +296,7 @@ function calculate() { //開始計算
 		if (disabled[job][1][i])
 			iohtml.outlevel.ability[i].text.value = '';
 	}
-	iohtml.explain.condition.text.value = L_attack ? (L_attack == 11 - data.inlevel.ignore ? '正常' : '剛好') : '無法';
+	iohtml.explain.condition.text.value = L_attack ? (L_attack == 11 - data.inlevel.ignore ? lang.normal : lang.just) : lang.cannnot;
 	iohtml.explain.condition.text.style.backgroundColor = L_attack ? (L_attack == 11 - data.inlevel.ignore ? '#44ff44' : '#ffff44') : '#ff4444';
 	iohtml.explain.gain.text.value = L_attack ? (L_attack == 11 - data.inlevel.ignore ? data.explain.gain : data.explain.gain2) : '';
 }

@@ -47,6 +47,10 @@
 	"pointlast": "剩餘點數",
 	"gain": "增加效益",
 
+	"normal":"正常",
+	"just":"剛好",
+	"cannnot":"無法",
+
 	"conditionexplain": "破防狀態說明",
 	"conditionexplaintext": "正常：本身就能破防<br>剛好：必須點極限屬性才能破防，增益不計算無視防禦<br>無法：就算點極限屬性也無法破防",
 	"inleveltext": "若已經有先點極限屬性時可以把原先等級輸入在中間",
