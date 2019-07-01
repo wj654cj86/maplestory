@@ -239,7 +239,7 @@ function calculate() { //開始計算
 				let N = 30 * (4 * (nowlevel[0] - level[0]) + (nowlevel[1] - level[1]));
 				return 1 + N / P;
 			}, function (nowlevel, base, level) {
-				let P = 545 + base[0];
+				let P = 545 + base[0] * 90;
 				let A = (P + (base[1] - P) * 0.8) / 3.5 + base[4];
 				let Q = 100 + base[2];
 				let N = (base[1] - base[3]) / Q * (Q + (nowlevel[2] - level[2]) * 2) + base[3];
